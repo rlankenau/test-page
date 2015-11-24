@@ -50,7 +50,7 @@
     <body>
         
         
-    <div class="book" data-level="2.3" data-chapter-title="Data in files" data-filepath="import/files.md" data-basepath=".." data-revision="Tue Nov 24 2015 07:55:46 GMT-0600 (CST)">
+    <div class="book" data-level="2.3" data-chapter-title="Data in files" data-filepath="import/files.md" data-basepath=".." data-revision="Tue Nov 24 2015 08:08:00 GMT-0600 (CST)">
     
 
 <div class="book-summary">
@@ -311,6 +311,17 @@
 <li>ezproxy_ingest.py</li>
 <li>patroncounter_ingest.py</li>
 </ul>
+<p>These scripts are only intended to run on a Windows computer, since they need to make changes to the Microsoft Access database, and Access only runs on Windows.</p>
+<h2 id="configuring-the-ezproxy-import-script">Configuring the ezproxy import script</h2>
+<p>EZproxy has some configuration options that change the way it logs data, and the import script needs to know that configuration so it can correctly import the data.  </p>
+<p>To do this, you&apos;ll need to locate the configuration files for your EZproxy installation.  This is most likely managed by your IT department, so you&apos;ll probably need to contact them.  You won&apos;t need to make any changes to the EZproxy configuration, you just need to copy a line from the software&apos;s config.txt file.  </p>
+<p>The line in question should look something like this:</p>
+<pre><code>LogFormat %h %l %u %t &quot;%r&quot; %s %b
+</code></pre><p>Don&apos;t worry if there are some extra parts after the word LogFormat, just copy the entire line. Open the ezproxy_ingest.py file with a text editor (notepad is fine).  You&apos;ll see a line near the top that looks like this:</p>
+<pre><code># Update this to match your EZProxy LogFormat
+logformat = &apos;LogFormat %h %l %u %t &quot;%r&quot; %s %b %{user-agent}i&apos;
+</code></pre><p>Replace the part in single quotes with the exact line copied from the EZproxy&apos;s config.txt file.  Make sure you have single quotes around it, and save the file.</p>
+<h2 id="getting-ready-to-run-the-scripts">Getting ready to run the scripts</h2>
 <p>All four of these scripts require that you install Python on your computer in order to run them.  The instructions for installing Python and the neccessary Python add-ons are included in <a href="../appendix/a-python.html">Appendix A</a>.</p>
 <p>The scripts access the Access database through an ODBC connection, so you must also go through the steps in the section on <a href="dsn.html">Setting up your database</a> before running them.</p>
 <p>Once those steps are complete, you can run one of the scripts by simply double-clicking on it.  It should open up a window that will print messages to the screen letting you know how the import process is going.  If it immediately exits, it means that some part of the setup for your Python environment or your ODBC connection wasn&apos;t correct.</p>
